@@ -23,14 +23,10 @@ permissions:
     default: op
     children:
       OldCombatMechanics.commands: true
-      OldCombatMechanics.notify: true
       OldCombatMechanics.nolapis: true
       OldCombatMechanics.swordblock: true
   OldCombatMechanics.commands:
     description: Allows the usage of OCM commands
-    default: op
-  OldCombatMechanics.notify:
-    description: Notifies of new OCM updates
     default: op
   OldCombatMechanics.nolapis:
     description: Allows lapis to be auto-placed in enchantment tables
