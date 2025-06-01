@@ -23,13 +23,9 @@ permissions:
     default: op
     children:
       oldcombatmechanics.commands: true
-      oldcombatmechanics.notify: true
       oldcombatmechanics.swordblock: true
   oldcombatmechanics.commands:
     description: Allows the usage of OCM commands
-    default: op
-  oldcombatmechanics.notify:
-    description: Notifies of new OCM updates
     default: op
   oldcombatmechanics.swordblock:
     description: Allows players to block with sword
