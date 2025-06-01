@@ -38,8 +38,6 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/central")
     // Placeholder API
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    // CodeMC Repo for bStats
-    maven("https://repo.codemc.org/repository/maven-public/")
     // Auth library from Minecraft
     maven("https://libraries.minecraft.net/")
     // Protocollib
@@ -47,7 +45,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.bstats:bstats-bukkit:3.0.2")
     // Shaded in by Bukkit
     compileOnly("io.netty:netty-all:4.1.106.Final")
     // Placeholder API
@@ -102,9 +99,6 @@ tasks.withType<JavaCompile> {
 tasks.named<ShadowJar>("shadowJar") {
     dependsOn("jar")
     archiveFileName.set("${project.name}.jar")
-    dependencies {
-        relocate("org.bstats", "kernitus.plugin.OldCombatMechanics.lib.bstats")
-    }
 }
 
 // For ingametesting

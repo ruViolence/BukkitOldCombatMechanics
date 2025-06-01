@@ -18,9 +18,6 @@ import kernitus.plugin.OldCombatMechanics.utilities.Messenger;
 import kernitus.plugin.OldCombatMechanics.utilities.damage.AttackCooldownTracker;
 import kernitus.plugin.OldCombatMechanics.utilities.damage.EntityDamageByEntityListener;
 import kernitus.plugin.OldCombatMechanics.utilities.reflection.Reflector;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimpleBarChart;
-import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventException;
@@ -92,25 +89,6 @@ public class OCMMain extends JavaPlugin {
 
         Config.reload();
 
-        // BStats Metrics
-        final Metrics metrics = new Metrics(this, 53);
-
-        // Simple bar chart
-        metrics.addCustomChart(
-                new SimpleBarChart(
-                        "enabled_modules",
-                        () -> ModuleLoader.getModules().stream()
-                                .filter(OCMModule::isEnabled)
-                                .collect(Collectors.toMap(OCMModule::toString, module -> 1))
-                )
-        );
-
-        // Pie chart of enabled/disabled for each module
-        ModuleLoader.getModules().forEach(module -> metrics.addCustomChart(
-                new SimplePie(module.getModuleName() + "_pie",
-                        () -> module.isEnabled() ? "enabled" : "disabled"
-                )));
-
         enableListeners.forEach(Runnable::run);
 
         // Properly handle Plugman load/unload.
@@ -139,10 +117,6 @@ public class OCMMain extends JavaPlugin {
         if (Config.moduleEnabled("update-checker"))
             Bukkit.getScheduler().runTaskLaterAsynchronously(this,
                     () -> new UpdateChecker(this).performUpdate(), 20L);
-
-        metrics.addCustomChart(new SimplePie("auto_update_pie",
-                () -> Config.moduleSettingEnabled("update-checker",
-                        "auto-update") ? "enabled" : "disabled"));
 
     }
 
