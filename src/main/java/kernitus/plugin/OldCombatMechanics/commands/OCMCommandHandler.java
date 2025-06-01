@@ -5,31 +5,24 @@
  */
 package kernitus.plugin.OldCombatMechanics.commands;
 
-import kernitus.plugin.OldCombatMechanics.ModuleLoader;
 import kernitus.plugin.OldCombatMechanics.OCMMain;
 import kernitus.plugin.OldCombatMechanics.utilities.Config;
 import kernitus.plugin.OldCombatMechanics.utilities.Messenger;
-import kernitus.plugin.OldCombatMechanics.utilities.storage.PlayerData;
-import kernitus.plugin.OldCombatMechanics.utilities.storage.PlayerStorage;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
 
 public class OCMCommandHandler implements CommandExecutor {
     private static final String NO_PERMISSION = "&cYou need the permission '%s' to do that!";
 
     private final OCMMain plugin;
 
-    enum Subcommand {reload, mode }
+    enum Subcommand {reload }
 
     public OCMCommandHandler(OCMMain instance) {
         this.plugin = instance;
@@ -43,10 +36,6 @@ public class OCMCommandHandler implements CommandExecutor {
 
         if (checkPermissions(sender, Subcommand.reload))
             Messenger.sendNoPrefix(sender, "&eYou can use &c/ocm reload&e to reload the config file");
-        if (checkPermissions(sender, Subcommand.mode))
-            Messenger.sendNoPrefix(sender,
-                    Config.getConfig().getString("mode-messages.message-usage",
-                            "&4ERROR: &rmode-messages.message-usage string missing"));
 
         Messenger.sendNoPrefix(sender, ChatColor.DARK_GRAY + Messenger.HORIZONTAL_BAR);
     }
@@ -54,84 +43,6 @@ public class OCMCommandHandler implements CommandExecutor {
     private void reload(CommandSender sender) {
         Config.reload();
         Messenger.sendNoPrefix(sender, "&6&lOldCombatMechanics&e config file reloaded");
-    }
-
-    private void mode(CommandSender sender, String[] args) {
-        if (args.length < 2) {
-            if(sender instanceof Player) {
-                final Player player = ((Player) sender);
-                final PlayerData playerData = PlayerStorage.getPlayerData(player.getUniqueId());
-                String modeName = playerData.getModesetForWorld(player.getWorld().getUID());
-                if(modeName == null || modeName.isEmpty()) modeName = "unknown";
-
-                Messenger.send(sender,
-                        Config.getConfig().getString("mode-messages.mode-status",
-                                "&4ERROR: &rmode-messages.mode-status string missing"),
-                                modeName
-                        );
-            }
-            Messenger.send(sender,
-                    Config.getConfig().getString("mode-messages.message-usage",
-                            "&4ERROR: &rmode-messages.message-usage string missing"));
-            return;
-        }
-
-        final String modesetName = args[1].toLowerCase(Locale.ROOT);
-
-        if (!Config.getModesets().containsKey(modesetName)) {
-            Messenger.send(sender,
-                    Config.getConfig().getString("mode-messages.invalid-modeset",
-                            "&4ERROR: &rmode-messages.invalid-modeset string missing"));
-            return;
-        }
-
-        Player player = null;
-        if (args.length < 3) {
-            if (sender instanceof Player) {
-                if (sender.hasPermission("oldcombatmechanics.mode.own"))
-                    player = (Player) sender;
-            }
-            else {
-                Messenger.send(sender,
-                        Config.getConfig().getString("mode-messages.invalid-player",
-                                "&4ERROR: &rmode-messages.invalid-player string missing"));
-                return;
-            }
-        } else if (sender.hasPermission("oldcombatmechanics.mode.others"))
-            player = Bukkit.getPlayer(args[2]);
-
-        if (player == null) {
-            Messenger.send(sender,
-                    Config.getConfig().getString("mode-messages.invalid-player",
-                            "&4ERROR: &rmode-messages.invalid-player string missing"));
-            return;
-        }
-
-        final UUID worldId = player.getWorld().getUID();
-        final Set<String> worldModesets = Config.getWorlds().get(worldId);
-
-        // If modesets null it means not configured, so all are allowed
-        if(worldModesets != null && !worldModesets.contains(modesetName)){ // Modeset not allowed in current world
-            Messenger.send(sender,
-                    Config.getConfig().getString("mode-messages.invalid-modeset",
-                            "&4ERROR: &rmode-messages.invalid-modeset string missing"));
-            return;
-        }
-
-        final PlayerData playerData = PlayerStorage.getPlayerData(player.getUniqueId());
-        playerData.setModesetForWorld(worldId, modesetName);
-        PlayerStorage.setPlayerData(player.getUniqueId(), playerData);
-        PlayerStorage.scheduleSave();
-
-        Messenger.send(sender,
-                Config.getConfig().getString("mode-messages.mode-set",
-                        "&4ERROR: &rmode-messages.mode-set string missing"),
-                modesetName
-        );
-
-        // Re-apply things like attack speed and collision team
-        final Player playerCopy = player;
-        ModuleLoader.getModules().forEach(module -> module.onModesetChange(playerCopy));
     }
 
     /*
@@ -161,9 +72,6 @@ public class OCMCommandHandler implements CommandExecutor {
                                 test(plugin, sender);
                                 break;
                                  */
-                            case mode:
-                                mode(sender, args);
-                                break;
                             default:
                                 throw new CommandNotRecognisedException();
                         }

@@ -9,8 +9,6 @@ import kernitus.plugin.OldCombatMechanics.OCMMain;
 import kernitus.plugin.OldCombatMechanics.hooks.api.Hook;
 import kernitus.plugin.OldCombatMechanics.module.ModuleDisableEnderpearlCooldown;
 import kernitus.plugin.OldCombatMechanics.module.ModuleGoldenApple;
-import kernitus.plugin.OldCombatMechanics.utilities.storage.PlayerData;
-import kernitus.plugin.OldCombatMechanics.utilities.storage.PlayerStorage;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -80,10 +78,7 @@ public class PlaceholderAPIHook implements Hook {
             }
 
             private String getModeset(Player player) {
-                final PlayerData playerData = PlayerStorage.getPlayerData(player.getUniqueId());
-                String modeName = playerData.getModesetForWorld(player.getWorld().getUID());
-                if (modeName == null || modeName.isEmpty()) modeName = "unknown";
-                return modeName;
+                return "old";
             }
         };
 
