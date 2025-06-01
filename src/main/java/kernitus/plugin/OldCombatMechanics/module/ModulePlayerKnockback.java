@@ -10,7 +10,6 @@ import kernitus.plugin.OldCombatMechanics.OCMMain;
 import kernitus.plugin.OldCombatMechanics.utilities.reflection.Reflector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -152,9 +151,7 @@ public class ModulePlayerKnockback extends OCMModule {
         // Calculate bonus knockback for sprinting or knockback enchantment levels
         final EntityEquipment equipment = attacker.getEquipment();
         if (equipment != null) {
-            final ItemStack heldItem = equipment.getItemInMainHand().getType() == Material.AIR
-                    ? equipment.getItemInOffHand()
-                    : equipment.getItemInMainHand();
+            final ItemStack heldItem = equipment.getItemInMainHand();
 
             int bonusKnockback = heldItem.getEnchantmentLevel(Enchantment.KNOCKBACK);
             if (attacker instanceof Player && ((Player) attacker).isSprinting())
