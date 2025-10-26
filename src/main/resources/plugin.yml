@@ -24,9 +24,6 @@ permissions:
     children:
       oldcombatmechanics.commands: true
       oldcombatmechanics.notify: true
-      oldcombatmechanics.mode: true
-      oldcombatmechanics.mode.own: true
-      oldcombatmechanics.mode.others: true
       oldcombatmechanics.swordblock: true
   oldcombatmechanics.commands:
     description: Allows the usage of OCM commands
@@ -34,19 +31,6 @@ permissions:
   oldcombatmechanics.notify:
     description: Notifies of new OCM updates
     default: op
-  oldcombatmechanics.mode:
-    description: Allows player to use /ocm mode to check own modeset
-    default: op
-  oldcombatmechanics.mode.own:
-    description: Allows player to use /ocm mode to change own modeset
-    default: op
-    children:
-      oldcombatmechanics.mode: true
-  oldcombatmechanics.mode.others:
-    description: Allows player to use /ocm mode to change other players' modeset
-    default: op
-    children:
-      oldcombatmechanics.mode: true
   oldcombatmechanics.swordblock:
     description: Allows players to block with sword
     default: op

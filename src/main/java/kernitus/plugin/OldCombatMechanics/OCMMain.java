@@ -18,8 +18,6 @@ import kernitus.plugin.OldCombatMechanics.utilities.Messenger;
 import kernitus.plugin.OldCombatMechanics.utilities.damage.AttackCooldownTracker;
 import kernitus.plugin.OldCombatMechanics.utilities.damage.EntityDamageByEntityListener;
 import kernitus.plugin.OldCombatMechanics.utilities.reflection.Reflector;
-import kernitus.plugin.OldCombatMechanics.utilities.storage.ModesetListener;
-import kernitus.plugin.OldCombatMechanics.utilities.storage.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventException;
@@ -57,9 +55,6 @@ public class OCMMain extends JavaPlugin {
 
         // Setting up config.yml
         CH.setupConfigIfNotPresent();
-
-        // Initialise persistent player storage
-        PlayerStorage.initialise(this);
 
         // Initialise ModuleLoader utility
         ModuleLoader.initialise(this);
@@ -155,8 +150,6 @@ public class OCMMain extends JavaPlugin {
             });
         });
 
-        PlayerStorage.instantSave();
-
         // Logging to console the disabling of OCM
         logger.info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been disabled");
     }
@@ -165,9 +158,6 @@ public class OCMMain extends JavaPlugin {
         // Update Checker (also a module, so we can use the dynamic
         // registering/unregistering)
         ModuleLoader.addModule(new ModuleUpdateChecker(this));
-
-        // Modeset listener, for when player joins or changes world
-        ModuleLoader.addModule(new ModesetListener(this));
 
         // Module listeners
         ModuleLoader.addModule(new ModuleAttackCooldown(this));

@@ -8,7 +8,6 @@ package kernitus.plugin.OldCombatMechanics.module;
 import kernitus.plugin.OldCombatMechanics.OCMMain;
 import kernitus.plugin.OldCombatMechanics.utilities.Config;
 import kernitus.plugin.OldCombatMechanics.utilities.Messenger;
-import kernitus.plugin.OldCombatMechanics.utilities.storage.PlayerStorage;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -67,14 +66,7 @@ public abstract class OCMModule implements Listener {
      * Whether this module should be enabled for this player given his current modeset
      */
     public boolean isEnabled(@NotNull HumanEntity humanEntity) {
-        final World world = humanEntity.getWorld();
-        final String modesetName = PlayerStorage.getPlayerData(humanEntity.getUniqueId()).getModesetForWorld(world.getUID());
-
-        if (modesetName == null) {
-            debug("No modeset found!", humanEntity);
-            debug("No modeset found for " + humanEntity.getName());
-            return isEnabled(world);
-        }
+        final String modesetName = "old";
 
         // Check if the modeset contains this module's name
         final Set<String> modeset = Config.getModesets().get(modesetName);
