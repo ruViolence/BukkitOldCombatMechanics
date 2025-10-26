@@ -43,8 +43,6 @@ repositories {
 }
 
 dependencies {
-    // Shaded in by Bukkit
-    compileOnly("io.netty:netty-all:4.1.106.Final")
     // Placeholder API
     compileOnly("me.clip:placeholderapi:2.11.5")
     // Spigot
